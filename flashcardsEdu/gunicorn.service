@@ -1,0 +1,13 @@
+[Unit]
+Description=Gunicorn daemon for Flashcards Django app
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/flashcards/backend
+Environment="DJANGO_SETTINGS_MODULE=flashcards.settings_prod"
+ExecStart=/var/www/flashcards/backend/venv/bin/gunicorn --workers 3 --bind 127.0.0.1:8000 flashcards.wsgi:application
+
+[Install]
+WantedBy=multi-user.target
