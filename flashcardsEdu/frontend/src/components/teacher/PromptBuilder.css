@@ -362,6 +362,75 @@
   justify-content: flex-end;
 }
 
+/* Prompt Type Selector */
+.prompt-type-selector {
+  margin-bottom: 25px;
+}
+
+.prompt-type-selector > p {
+  margin-bottom: 15px;
+  font-weight: 500;
+  color: #555;
+}
+
+.prompt-type-buttons {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.prompt-type-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.prompt-type-btn:hover {
+  border-color: #667eea;
+  background: #f8f9ff;
+}
+
+.prompt-type-btn.active {
+  border-color: #667eea;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+}
+
+.prompt-type-icon {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.prompt-type-label {
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.prompt-type-desc {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.notebooklm-tip {
+  background: #f0f7ff;
+  border-left: 4px solid #667eea;
+  padding: 15px 20px;
+  margin-bottom: 25px;
+  border-radius: 0 8px 8px 0;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.prompt-instruction {
+  margin-bottom: 15px !important;
+}
+
 @media (max-width: 768px) {
   .builder-header {
     padding: 15px 20px;
@@ -385,5 +454,9 @@
   .paste-phase,
   .review-phase {
     padding: 25px 20px;
+  }
+
+  .prompt-type-buttons {
+    grid-template-columns: 1fr;
   }
 }
