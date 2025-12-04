@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../utils/api'
+import LoadingSpinner from '../common/LoadingSpinner'
 import './MatchGame.css'
 
 function MatchGame() {
@@ -141,7 +142,7 @@ function MatchGame() {
   }
 
   if (loading) {
-    return <div className="match-loading">Loading...</div>
+    return <LoadingSpinner message="Loading match game..." fullPage />
   }
 
   if (gameComplete) {

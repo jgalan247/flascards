@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../utils/api'
 import { fuzzyMatch } from '../../utils/cardParser'
+import LoadingSpinner from '../common/LoadingSpinner'
 import './LearnMode.css'
 
 function LearnMode() {
@@ -89,7 +90,7 @@ function LearnMode() {
   }
 
   if (loading) {
-    return <div className="learn-loading">Loading...</div>
+    return <LoadingSpinner message="Loading learn mode..." fullPage />
   }
 
   if (isComplete) {

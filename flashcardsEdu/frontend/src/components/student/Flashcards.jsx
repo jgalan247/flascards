@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../utils/api'
+import LoadingSpinner from '../common/LoadingSpinner'
 import './Flashcards.css'
 
 function Flashcards() {
@@ -89,7 +90,7 @@ function Flashcards() {
   }, [currentIndex, isFlipped, cards.length])
 
   if (loading) {
-    return <div className="flashcards-loading">Loading...</div>
+    return <LoadingSpinner message="Loading flashcards..." fullPage />
   }
 
   if (!cards.length) {

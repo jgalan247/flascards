@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../utils/api'
+import LoadingSpinner from '../common/LoadingSpinner'
 import './DeckManager.css'
 
 function DeckManager({ teacher, onLogout }) {
@@ -9,6 +10,8 @@ function DeckManager({ teacher, onLogout }) {
   const [deck, setDeck] = useState(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [savingField, setSavingField] = useState(null)
+  const [error, setError] = useState('')
   const [editedCards, setEditedCards] = useState([])
 
   useEffect(() => {
@@ -17,12 +20,13 @@ function DeckManager({ teacher, onLogout }) {
 
   const fetchDeck = async () => {
     try {
+      setError('')
       const response = await api.get(`/decks/${slug}/`)
       setDeck(response.data)
       setEditedCards(response.data.cards || [])
     } catch (error) {
       console.error('Error fetching deck:', error)
-      navigate('/')
+      setError('Failed to load deck')
     } finally {
       setLoading(false)
     }
@@ -65,38 +69,47 @@ function DeckManager({ teacher, onLogout }) {
       (card) => !card.question?.trim() || !card.answer?.trim()
     )
     if (invalidCards.length > 0) {
-      alert('All cards must have a question and answer')
+      setError('All cards must have a question and answer')
       return
     }
 
     setSaving(true)
+    setError('')
     try {
       await api.put(`/decks/${slug}/update_cards/`, { cards: editedCards })
-      alert('Deck saved successfully!')
       navigate('/')
     } catch (error) {
       console.error('Error saving deck:', error)
-      alert('Error saving deck')
+      setError('Failed to save deck. Please try again.')
     } finally {
       setSaving(false)
     }
   }
 
   const handleUpdateDeckInfo = async (field, value) => {
+    setSavingField(field)
     try {
       await api.patch(`/decks/${slug}/`, { [field]: value })
       setDeck({ ...deck, [field]: value })
     } catch (error) {
       console.error('Error updating deck:', error)
+      setError(`Failed to update ${field}`)
+    } finally {
+      setSavingField(null)
     }
   }
 
   if (loading) {
-    return <div className="loading">Loading deck...</div>
+    return <LoadingSpinner message="Loading deck..." fullPage />
   }
 
-  if (!deck) {
-    return <div className="error">Deck not found</div>
+  if (error && !deck) {
+    return (
+      <div className="error-page">
+        <p>{error}</p>
+        <button onClick={() => navigate('/')}>Back to Dashboard</button>
+      </div>
+    )
   }
 
   return (
@@ -111,43 +124,66 @@ function DeckManager({ teacher, onLogout }) {
         </button>
       </header>
 
+      {error && (
+        <div className="error-banner">
+          {error}
+          <button onClick={() => setError('')}>&times;</button>
+        </div>
+      )}
+
       <main className="manager-main">
         <div className="deck-info-section">
           <div className="info-field">
-            <label>Deck Title</label>
+            <label>
+              Deck Title
+              {savingField === 'title' && <LoadingSpinner size="small" message="" />}
+            </label>
             <input
               type="text"
               value={deck.title}
               onChange={(e) => setDeck({ ...deck, title: e.target.value })}
               onBlur={(e) => handleUpdateDeckInfo('title', e.target.value)}
+              disabled={savingField === 'title'}
             />
           </div>
           <div className="info-row">
             <div className="info-field">
-              <label>Exam Board</label>
+              <label>
+                Exam Board
+                {savingField === 'exam_board' && <LoadingSpinner size="small" message="" />}
+              </label>
               <input
                 type="text"
                 value={deck.exam_board || ''}
                 onChange={(e) => setDeck({ ...deck, exam_board: e.target.value })}
                 onBlur={(e) => handleUpdateDeckInfo('exam_board', e.target.value)}
+                disabled={savingField === 'exam_board'}
               />
             </div>
             <div className="info-field">
-              <label>Year Group</label>
+              <label>
+                Year Group
+                {savingField === 'year_group' && <LoadingSpinner size="small" message="" />}
+              </label>
               <input
                 type="text"
                 value={deck.year_group || ''}
                 onChange={(e) => setDeck({ ...deck, year_group: e.target.value })}
                 onBlur={(e) => handleUpdateDeckInfo('year_group', e.target.value)}
+                disabled={savingField === 'year_group'}
               />
             </div>
             <div className="info-field">
-              <label>Target Grade</label>
+              <label>
+                Target Grade
+                {savingField === 'target_grade' && <LoadingSpinner size="small" message="" />}
+              </label>
               <input
                 type="text"
                 value={deck.target_grade || ''}
                 onChange={(e) => setDeck({ ...deck, target_grade: e.target.value })}
                 onBlur={(e) => handleUpdateDeckInfo('target_grade', e.target.value)}
+                disabled={savingField === 'target_grade'}
               />
             </div>
           </div>

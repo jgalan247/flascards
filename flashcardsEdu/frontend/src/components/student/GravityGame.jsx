@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../utils/api'
 import { fuzzyMatch } from '../../utils/cardParser'
+import LoadingSpinner from '../common/LoadingSpinner'
 import './GravityGame.css'
 
 function GravityGame() {
@@ -182,7 +183,7 @@ function GravityGame() {
   }, [gameState, score, highScore, slug])
 
   if (loading) {
-    return <div className="gravity-loading">Loading...</div>
+    return <LoadingSpinner message="Loading gravity game..." fullPage />
   }
 
   if (gameState === 'ready') {
