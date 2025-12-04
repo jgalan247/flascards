@@ -2,6 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.decorators import api_view, action
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.throttling import AnonRateThrottle
 from django.shortcuts import get_object_or_404
 
 from .models import Teacher, Subject, Deck, Card
@@ -12,8 +13,25 @@ from .serializers import (
 )
 
 
+class LoginRateThrottle(AnonRateThrottle):
+    """Rate limit for login attempts: 5 per minute"""
+    scope = 'login'
+
+
+class RegisterRateThrottle(AnonRateThrottle):
+    """Rate limit for registration: 3 per hour"""
+    scope = 'register'
+
+
 class AuthView(APIView):
     """Handle teacher authentication"""
+
+    def get_throttles(self):
+        if self.kwargs.get('action') == 'login':
+            return [LoginRateThrottle()]
+        elif self.kwargs.get('action') == 'register':
+            return [RegisterRateThrottle()]
+        return []
 
     def post(self, request, action=None):
         if action == 'register':

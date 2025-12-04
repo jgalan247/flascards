@@ -1,5 +1,38 @@
+import re
 from rest_framework import serializers
 from .models import Teacher, Subject, Deck, Card
+
+
+def validate_password_strength(password):
+    """
+    Validate password meets security requirements:
+    - At least 8 characters
+    - At least one uppercase letter
+    - At least one lowercase letter
+    - At least one number
+    - At least one special character
+    """
+    errors = []
+
+    if len(password) < 8:
+        errors.append('Password must be at least 8 characters long.')
+
+    if not re.search(r'[A-Z]', password):
+        errors.append('Password must contain at least one uppercase letter.')
+
+    if not re.search(r'[a-z]', password):
+        errors.append('Password must contain at least one lowercase letter.')
+
+    if not re.search(r'\d', password):
+        errors.append('Password must contain at least one number.')
+
+    if not re.search(r'[!@#$%^&*(),.?":{}|<>]', password):
+        errors.append('Password must contain at least one special character (!@#$%^&*(),.?":{}|<>).')
+
+    if errors:
+        raise serializers.ValidationError(errors)
+
+    return password
 
 
 class CardSerializer(serializers.ModelSerializer):
@@ -96,6 +129,9 @@ class TeacherRegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Teacher
         fields = ['name', 'email', 'password']
+
+    def validate_password(self, value):
+        return validate_password_strength(value)
 
     def create(self, validated_data):
         teacher = Teacher(
