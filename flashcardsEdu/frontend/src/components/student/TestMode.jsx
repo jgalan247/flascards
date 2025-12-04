@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../utils/api'
+import LoadingSpinner from '../common/LoadingSpinner'
 import './TestMode.css'
 
 function TestMode() {
@@ -109,7 +110,7 @@ function TestMode() {
   }
 
   if (loading) {
-    return <div className="test-loading">Loading...</div>
+    return <LoadingSpinner message="Loading test..." fullPage />
   }
 
   if (questions.length === 0) {

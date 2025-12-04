@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { promptSteps, generatePrompt } from '../../utils/promptGenerator'
+import { promptSteps, generatePrompt, generateNotebookLMPrompt } from '../../utils/promptGenerator'
 import { parseCards, validateCards } from '../../utils/cardParser'
 import api from '../../utils/api'
 import './PromptBuilder.css'
@@ -19,6 +19,7 @@ function PromptBuilder({ teacher, onLogout }) {
     accessibility: '',
     cardCount: 20,
   })
+  const [promptType, setPromptType] = useState('chatgpt') // 'chatgpt' or 'notebooklm'
   const [generatedPrompt, setGeneratedPrompt] = useState('')
   const [aiResponse, setAiResponse] = useState('')
   const [parsedCards, setParsedCards] = useState(null)
@@ -39,10 +40,20 @@ function PromptBuilder({ teacher, onLogout }) {
       setCurrentStep(currentStep + 1)
     } else {
       // Generate prompt and move to next phase
-      const prompt = generatePrompt(formData)
+      const prompt = promptType === 'notebooklm'
+        ? generateNotebookLMPrompt(formData)
+        : generatePrompt(formData)
       setGeneratedPrompt(prompt)
       setPhase('prompt')
     }
+  }
+
+  const handlePromptTypeChange = (type) => {
+    setPromptType(type)
+    const prompt = type === 'notebooklm'
+      ? generateNotebookLMPrompt(formData)
+      : generatePrompt(formData)
+    setGeneratedPrompt(prompt)
   }
 
   const handleBack = () => {
@@ -53,7 +64,8 @@ function PromptBuilder({ teacher, onLogout }) {
 
   const handleCopyPrompt = () => {
     navigator.clipboard.writeText(generatedPrompt)
-    alert('Prompt copied! Paste it into ChatGPT or Claude.')
+    const destination = promptType === 'notebooklm' ? 'NotebookLM' : 'ChatGPT or Claude'
+    alert(`Prompt copied! Paste it into ${destination}.`)
   }
 
   const handleParseResponse = () => {
@@ -177,7 +189,40 @@ function PromptBuilder({ teacher, onLogout }) {
   const renderPromptPhase = () => (
     <div className="prompt-phase">
       <h2>Your AI Prompt is Ready!</h2>
-      <p>Copy this prompt and paste it into ChatGPT or Claude:</p>
+
+      <div className="prompt-type-selector">
+        <p>Choose your AI tool:</p>
+        <div className="prompt-type-buttons">
+          <button
+            className={`prompt-type-btn ${promptType === 'chatgpt' ? 'active' : ''}`}
+            onClick={() => handlePromptTypeChange('chatgpt')}
+          >
+            <span className="prompt-type-icon">💬</span>
+            <span className="prompt-type-label">ChatGPT / Claude</span>
+            <span className="prompt-type-desc">General AI knowledge</span>
+          </button>
+          <button
+            className={`prompt-type-btn ${promptType === 'notebooklm' ? 'active' : ''}`}
+            onClick={() => handlePromptTypeChange('notebooklm')}
+          >
+            <span className="prompt-type-icon">📚</span>
+            <span className="prompt-type-label">NotebookLM</span>
+            <span className="prompt-type-desc">Uses your uploaded sources</span>
+          </button>
+        </div>
+      </div>
+
+      {promptType === 'notebooklm' && (
+        <div className="notebooklm-tip">
+          <strong>Tip:</strong> Before using this prompt, upload your course materials
+          (textbooks, notes, past papers) to NotebookLM. The AI will create flashcards
+          based only on your uploaded sources.
+        </div>
+      )}
+
+      <p className="prompt-instruction">
+        Copy this prompt and paste it into {promptType === 'notebooklm' ? 'NotebookLM' : 'ChatGPT or Claude'}:
+      </p>
 
       <div className="prompt-display">
         <pre>{generatedPrompt}</pre>
@@ -200,13 +245,15 @@ function PromptBuilder({ teacher, onLogout }) {
   const renderPastePhase = () => (
     <div className="paste-phase">
       <h2>Paste AI Response</h2>
-      <p>Paste the entire response from ChatGPT or Claude below:</p>
+      <p>
+        Paste the entire response from {promptType === 'notebooklm' ? 'NotebookLM' : 'ChatGPT or Claude'} below:
+      </p>
 
       <textarea
         className="ai-response-input"
         value={aiResponse}
         onChange={(e) => setAiResponse(e.target.value)}
-        placeholder="Paste the AI's response here..."
+        placeholder={`Paste the ${promptType === 'notebooklm' ? 'NotebookLM' : 'AI'}'s response here...`}
         rows={12}
       />
 

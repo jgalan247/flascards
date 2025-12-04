@@ -133,3 +133,47 @@ Important:
 
   return prompt
 }
+
+export function generateNotebookLMPrompt(formData) {
+  const prompt = `Using the sources I've uploaded, create ${formData.cardCount || 20} flashcards for ${formData.subject} on the topic of "${formData.topic}".
+
+**Important: Base all flashcards ONLY on the content from my uploaded sources.** Do not include information from outside these documents.
+
+**Context:**
+- Exam Board: ${formData.examBoard || 'Not specified'}
+- Year Group: ${formData.yearGroup || 'Not specified'}
+- Target Grade: ${formData.targetGrade || 'Not specified'}
+
+**Learning Objectives to focus on:**
+${formData.learningObjectives || 'Cover key concepts from the sources comprehensively'}
+
+**Exam Board Specific Requirements:**
+${formData.boardNuances || 'Follow standard exam board expectations'}
+
+**Address These Common Misconceptions (if covered in sources):**
+${formData.misconceptions || 'Address typical student misunderstandings found in the materials'}
+
+**Accessibility Considerations:**
+${formData.accessibility || 'Standard complexity'}
+
+**Format Requirements:**
+Please output the flashcards in this exact JSON format:
+\`\`\`json
+[
+  {
+    "question": "Question text here",
+    "answer": "Answer text here"
+  }
+]
+\`\`\`
+
+Important:
+- Each card should test ONE concept from the uploaded sources
+- Questions should use appropriate command words for the target grade
+- Answers should be concise but complete, using terminology from the sources
+- Include a mix of recall, understanding, and application questions
+- Reference specific content, examples, or case studies from the uploaded materials
+- Make sure cards align with what's actually covered in the sources`
+
+  return prompt
+}

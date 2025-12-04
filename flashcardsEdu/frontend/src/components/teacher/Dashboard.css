@@ -213,6 +213,49 @@
   color: #666;
 }
 
+/* Error banner */
+.error-banner {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.95rem;
+}
+
+.error-banner button {
+  background: none;
+  border: none;
+  color: #dc2626;
+  font-size: 1.4rem;
+  cursor: pointer;
+  padding: 0 0 0 15px;
+  line-height: 1;
+}
+
+.error-banner button:hover {
+  color: #991b1b;
+}
+
+/* Button loading state */
+.btn-loading {
+  opacity: 0.7;
+  cursor: not-allowed !important;
+}
+
+.btn-delete.btn-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-delete.btn-loading .spinner {
+  border-color: #fecaca;
+  border-top-color: #ef4444;
+}
+
 @media (max-width: 768px) {
   .dashboard-header {
     padding: 20px;

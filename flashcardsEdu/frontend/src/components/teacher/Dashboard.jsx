@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../../utils/api'
+import LoadingSpinner from '../common/LoadingSpinner'
 import './Dashboard.css'
 
 function Dashboard({ teacher, onLogout }) {
   const [decks, setDecks] = useState([])
   const [subjects, setSubjects] = useState([])
   const [loading, setLoading] = useState(true)
+  const [deletingSlug, setDeletingSlug] = useState(null)
+  const [error, setError] = useState('')
   const [filterSubject, setFilterSubject] = useState('')
   const navigate = useNavigate()
 
@@ -16,6 +19,7 @@ function Dashboard({ teacher, onLogout }) {
 
   const fetchData = async () => {
     try {
+      setError('')
       const [decksRes, subjectsRes] = await Promise.all([
         api.get('/decks/'),
         api.get('/subjects/'),
@@ -24,6 +28,7 @@ function Dashboard({ teacher, onLogout }) {
       setSubjects(subjectsRes.data)
     } catch (error) {
       console.error('Error fetching data:', error)
+      setError('Failed to load decks. Please try again.')
     } finally {
       setLoading(false)
     }
@@ -32,11 +37,16 @@ function Dashboard({ teacher, onLogout }) {
   const handleDeleteDeck = async (slug) => {
     if (!window.confirm('Are you sure you want to delete this deck?')) return
 
+    setDeletingSlug(slug)
+    setError('')
     try {
       await api.delete(`/decks/${slug}/`)
       setDecks(decks.filter((d) => d.slug !== slug))
     } catch (error) {
       console.error('Error deleting deck:', error)
+      setError('Failed to delete deck. Please try again.')
+    } finally {
+      setDeletingSlug(null)
     }
   }
 
@@ -51,11 +61,17 @@ function Dashboard({ teacher, onLogout }) {
     : decks
 
   if (loading) {
-    return <div className="loading">Loading your decks...</div>
+    return <LoadingSpinner message="Loading your decks..." fullPage />
   }
 
   return (
     <div className="dashboard">
+      {error && (
+        <div className="error-banner">
+          {error}
+          <button onClick={() => setError('')}>&times;</button>
+        </div>
+      )}
       <header className="dashboard-header">
         <div className="header-left">
           <h1>My Flashcard Decks</h1>
@@ -130,11 +146,16 @@ function Dashboard({ teacher, onLogout }) {
                     Edit
                   </button>
                   <button
-                    className="btn-delete"
+                    className={`btn-delete ${deletingSlug === deck.slug ? 'btn-loading' : ''}`}
                     onClick={() => handleDeleteDeck(deck.slug)}
+                    disabled={deletingSlug === deck.slug}
                     title="Delete deck"
                   >
-                    Delete
+                    {deletingSlug === deck.slug ? (
+                      <LoadingSpinner size="small" message="" />
+                    ) : (
+                      'Delete'
+                    )}
                   </button>
                 </div>
               </div>
