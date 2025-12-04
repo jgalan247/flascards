@@ -140,3 +140,6 @@ REST_FRAMEWORK = {
 
 # Static files for production
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# Session settings
+SESSION_COOKIE_AGE = 86400  # 24 hours in seconds

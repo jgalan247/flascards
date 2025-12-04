@@ -41,6 +41,7 @@ SECURE_CONTENT_TYPE_NOSNIFF = True
 X_FRAME_OPTIONS = 'DENY'
 
 # Session settings
+SESSION_COOKIE_AGE = 86400  # 24 hours in seconds
 SESSION_COOKIE_SECURE = False  # Set to True with HTTPS
 CSRF_COOKIE_SECURE = False  # Set to True with HTTPS
 SESSION_COOKIE_HTTPONLY = True
