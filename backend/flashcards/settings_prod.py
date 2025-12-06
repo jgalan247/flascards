@@ -13,8 +13,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', SECRET_KEY)
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    # Add your domain here
-    # 'flashcards.yourdomain.com',
+    'flashcards.cshub.org.je',
 ]
 
 # Add your droplet IP
@@ -27,9 +26,9 @@ CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',
     'http://127.0.0.1:5173',
-    # Add your domain here
-    # 'https://flashcards.yourdomain.com',
+    'https://flashcards.cshub.org.je',
 ]
+CORS_ALLOW_CREDENTIALS = True
 
 # Add droplet to CORS
 if DROPLET_IP:
@@ -42,10 +41,15 @@ X_FRAME_OPTIONS = 'DENY'
 
 # Session settings
 SESSION_COOKIE_AGE = 86400  # 24 hours in seconds
-SESSION_COOKIE_SECURE = False  # Set to True with HTTPS
-CSRF_COOKIE_SECURE = False  # Set to True with HTTPS
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_HTTPONLY = True
-CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_HTTPONLY = False  # Frontend needs to read CSRF token
+
+# CSRF settings
+CSRF_TRUSTED_ORIGINS = [
+    'https://flashcards.cshub.org.je',
+]
 
 # Static files
 STATIC_ROOT = BASE_DIR / 'staticfiles'
