@@ -45,15 +45,20 @@ class DeckSerializer(serializers.ModelSerializer):
     cards = CardSerializer(many=True, read_only=True)
     subject_name = serializers.CharField(source='subject.name', read_only=True)
     teacher_name = serializers.CharField(source='teacher.name', read_only=True)
+    display_author = serializers.SerializerMethodField()
 
     class Meta:
         model = Deck
         fields = [
             'id', 'title', 'slug', 'subject', 'subject_name',
             'teacher', 'teacher_name', 'exam_board', 'year_group',
-            'target_grade', 'created_at', 'updated_at', 'is_public', 'cards'
+            'target_grade', 'created_by', 'display_author', 'created_at', 'updated_at', 'is_public', 'cards'
         ]
         read_only_fields = ['slug', 'created_at', 'updated_at', 'teacher']
+
+    def get_display_author(self, obj):
+        # Return custom created_by if set, otherwise teacher name
+        return obj.created_by if obj.created_by else obj.teacher.name
 
 
 class DeckListSerializer(serializers.ModelSerializer):
@@ -75,7 +80,8 @@ class DeckListSerializer(serializers.ModelSerializer):
 
 class DeckCreateSerializer(serializers.ModelSerializer):
     cards = CardSerializer(many=True)
-    subject_name = serializers.CharField(write_only=True, required=False)
+    subject_name = serializers.CharField(write_only=True, required=True)
+    subject = serializers.PrimaryKeyRelatedField(queryset=Subject.objects.all(), required=False)
 
     class Meta:
         model = Deck
@@ -87,19 +93,28 @@ class DeckCreateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         cards_data = validated_data.pop('cards')
         subject_name = validated_data.pop('subject_name', None)
-        teacher = self.context['request'].teacher
+        validated_data.pop('subject', None)  # Remove subject if passed, we'll use subject_name
 
-        # Create subject if name provided and subject not specified
-        if subject_name and 'subject' not in validated_data:
+        # Get teacher from context
+        teacher = getattr(self.context.get('request'), 'teacher', None)
+        if not teacher:
+            raise serializers.ValidationError({'error': 'Authentication required'})
+
+        # Create or get subject from name
+        if subject_name:
             subject, _ = Subject.objects.get_or_create(
                 name=subject_name,
                 teacher=teacher
             )
             validated_data['subject'] = subject
+        else:
+            raise serializers.ValidationError({'subject_name': 'Subject is required'})
 
         deck = Deck.objects.create(teacher=teacher, **validated_data)
 
         for idx, card_data in enumerate(cards_data):
+            # Remove order if present, use idx instead
+            card_data.pop('order', None)
             Card.objects.create(deck=deck, order=idx, **card_data)
 
         return deck

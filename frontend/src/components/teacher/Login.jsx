@@ -22,7 +22,23 @@ function Login({ onLogin }) {
       const response = await api.post(endpoint, formData)
       onLogin(response.data.teacher)
     } catch (err) {
-      setError(err.response?.data?.error || 'An error occurred')
+      const data = err.response?.data
+      if (data) {
+        // Handle DRF validation errors (field-specific errors)
+        if (typeof data === 'object' && !data.error) {
+          const messages = Object.entries(data)
+            .map(([field, errors]) => {
+              const errorList = Array.isArray(errors) ? errors : [errors]
+              return errorList.join(' ')
+            })
+            .join(' ')
+          setError(messages || 'Validation failed')
+        } else {
+          setError(data.error || 'An error occurred')
+        }
+      } else {
+        setError('An error occurred')
+      }
     } finally {
       setLoading(false)
     }
@@ -36,7 +52,9 @@ function Login({ onLogin }) {
     <div className="login-container">
       <div className="login-card">
         <div className="login-header">
+          <p className="school-name">Le Rocquier School <span className="powered-by">Powered by AI</span></p>
           <h1>Flashcard Generator</h1>
+          <p className="tagline">Learn. Revise. Succeed.</p>
           <p>Create AI-powered flashcards for your students</p>
         </div>
 
@@ -83,6 +101,18 @@ function Login({ onLogin }) {
               required
               minLength={8}
             />
+            {isRegister && (
+              <div className="password-requirements">
+                <p>Password must contain:</p>
+                <ul>
+                  <li>At least 8 characters</li>
+                  <li>At least one uppercase letter</li>
+                  <li>At least one lowercase letter</li>
+                  <li>At least one number</li>
+                  <li>At least one special character (!@#$%^&*(),.?":{}|&lt;&gt;)</li>
+                </ul>
+              </div>
+            )}
           </div>
 
           {error && <div className="error-message">{error}</div>}
@@ -101,6 +131,12 @@ function Login({ onLogin }) {
               {isRegister ? 'Sign In' : 'Create one'}
             </button>
           </p>
+
+          {!isRegister && (
+            <p className="forgot-password">
+              Forgot your password? Contact your administrator.
+            </p>
+          )}
         </form>
       </div>
     </div>

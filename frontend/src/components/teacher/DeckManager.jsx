@@ -146,6 +146,20 @@ function DeckManager({ teacher, onLogout }) {
               disabled={savingField === 'title'}
             />
           </div>
+          <div className="info-field">
+            <label>
+              Created By
+              {savingField === 'created_by' && <LoadingSpinner size="small" message="" />}
+            </label>
+            <input
+              type="text"
+              value={deck.created_by || ''}
+              onChange={(e) => setDeck({ ...deck, created_by: e.target.value })}
+              onBlur={(e) => handleUpdateDeckInfo('created_by', e.target.value)}
+              placeholder={teacher.name}
+              disabled={savingField === 'created_by'}
+            />
+          </div>
           <div className="info-row">
             <div className="info-field">
               <label>

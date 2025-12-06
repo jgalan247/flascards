@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../utils/api'
 import LoadingSpinner from '../common/LoadingSpinner'
+import Branding from '../common/Branding'
 import './TestMode.css'
 
 function TestMode() {
@@ -189,6 +190,7 @@ function TestMode() {
 
   return (
     <div className="test-container">
+      <Branding />
       <header className="test-header">
         <button className="btn-back" onClick={() => navigate(`/study/${slug}`)}>
           ← Back

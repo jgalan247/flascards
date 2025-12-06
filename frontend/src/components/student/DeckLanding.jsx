@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../utils/api'
+import Branding from '../common/Branding'
 import './DeckLanding.css'
 
 function DeckLanding() {
@@ -9,9 +10,11 @@ function DeckLanding() {
   const [deck, setDeck] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [isTeacher, setIsTeacher] = useState(false)
 
   useEffect(() => {
     fetchDeck()
+    checkIfTeacher()
   }, [slug])
 
   const fetchDeck = async () => {
@@ -22,6 +25,17 @@ function DeckLanding() {
       setError('Deck not found or not available')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const checkIfTeacher = async () => {
+    try {
+      const response = await api.get('/auth/me/')
+      if (response.data) {
+        setIsTeacher(true)
+      }
+    } catch (err) {
+      setIsTeacher(false)
     }
   }
 
@@ -84,7 +98,15 @@ function DeckLanding() {
 
   return (
     <div className="deck-landing">
+      {isTeacher && (
+        <nav className="landing-nav">
+          <button className="btn-back" onClick={() => navigate('/')}>
+            ← Back to Dashboard
+          </button>
+        </nav>
+      )}
       <header className="landing-header">
+        <Branding light />
         <div className="deck-badge">{deck.cards?.length} cards</div>
         <h1>{deck.title}</h1>
         <div className="deck-details">
@@ -93,7 +115,7 @@ function DeckLanding() {
           {deck.year_group && <span>{deck.year_group}</span>}
           {deck.target_grade && <span>{deck.target_grade}</span>}
         </div>
-        <p className="deck-author">Created by {deck.teacher_name}</p>
+        <p className="deck-author">Created by {deck.display_author || deck.teacher_name}</p>
       </header>
 
       <main className="landing-main">
@@ -117,6 +139,7 @@ function DeckLanding() {
 
       <footer className="landing-footer">
         <p>Flashcard Generator - AI-powered study tools for students</p>
+        <p className="copyright">© {new Date().getFullYear()} Dr Galan. All rights reserved. A <a href="https://coderra.je" target="_blank" rel="noopener noreferrer">Coderra.je</a> production.</p>
       </footer>
     </div>
   )

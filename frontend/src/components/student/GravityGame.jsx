@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../utils/api'
 import { fuzzyMatch } from '../../utils/cardParser'
 import LoadingSpinner from '../common/LoadingSpinner'
+import Branding from '../common/Branding'
 import './GravityGame.css'
 
 function GravityGame() {
@@ -246,6 +247,7 @@ function GravityGame() {
 
   return (
     <div className="gravity-container">
+      <Branding />
       <header className="gravity-header">
         <button
           className="btn-back"

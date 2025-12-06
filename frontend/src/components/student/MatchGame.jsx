@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../utils/api'
 import LoadingSpinner from '../common/LoadingSpinner'
+import Branding from '../common/Branding'
 import './MatchGame.css'
 
 function MatchGame() {
@@ -179,6 +180,7 @@ function MatchGame() {
 
   return (
     <div className="match-container">
+      <Branding />
       <header className="match-header">
         <button className="btn-back" onClick={() => navigate(`/study/${slug}`)}>
           ← Back

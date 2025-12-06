@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../utils/api'
 import { fuzzyMatch } from '../../utils/cardParser'
 import LoadingSpinner from '../common/LoadingSpinner'
+import Branding from '../common/Branding'
 import './LearnMode.css'
 
 function LearnMode() {
@@ -139,6 +140,7 @@ function LearnMode() {
 
   return (
     <div className="learn-container">
+      <Branding />
       <header className="learn-header">
         <button className="btn-back" onClick={() => navigate(`/study/${slug}`)}>
           ← Back

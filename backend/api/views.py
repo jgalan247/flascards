@@ -1,9 +1,12 @@
 from rest_framework import viewsets, status
-from rest_framework.decorators import api_view, action
+from rest_framework.decorators import api_view, action, authentication_classes, permission_classes
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.throttling import AnonRateThrottle
+from rest_framework.permissions import AllowAny
 from django.shortcuts import get_object_or_404
+from django.middleware.csrf import get_token
+from django.http import JsonResponse
 
 from .models import Teacher, Subject, Deck, Card
 from .serializers import (
@@ -81,6 +84,9 @@ class AuthView(APIView):
 @api_view(['GET'])
 def get_current_teacher(request):
     """Get currently logged in teacher"""
+    # Ensure CSRF cookie is set
+    get_token(request)
+
     teacher_id = request.session.get('teacher_id')
     if teacher_id:
         try:
@@ -92,6 +98,8 @@ def get_current_teacher(request):
 
 
 @api_view(['POST'])
+@authentication_classes([])
+@permission_classes([AllowAny])
 def logout(request):
     """Log out current teacher"""
     request.session.flush()
@@ -140,10 +148,22 @@ class DeckViewSet(viewsets.ModelViewSet):
         teacher_id = self.request.session.get('teacher_id')
         if teacher_id:
             try:
-                context['request'].teacher = Teacher.objects.get(id=teacher_id)
+                teacher = Teacher.objects.get(id=teacher_id)
+                self.request.teacher = teacher
+                context['request'].teacher = teacher
             except Teacher.DoesNotExist:
                 pass
         return context
+
+    def perform_create(self, serializer):
+        # Ensure teacher is set before saving
+        teacher_id = self.request.session.get('teacher_id')
+        if teacher_id:
+            try:
+                self.request.teacher = Teacher.objects.get(id=teacher_id)
+            except Teacher.DoesNotExist:
+                pass
+        serializer.save()
 
     def create(self, request, *args, **kwargs):
         teacher_id = request.session.get('teacher_id')

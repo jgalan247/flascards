@@ -3,6 +3,27 @@
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
+.landing-nav {
+  display: flex;
+  justify-content: flex-start;
+  padding: 20px;
+}
+
+.landing-nav .btn-back {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.landing-nav .btn-back:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
 .landing-loading,
 .landing-error {
   min-height: 100vh;
@@ -48,8 +69,36 @@
 
 .landing-header {
   text-align: center;
-  padding: 60px 20px 40px;
+  padding: 20px 20px 40px;
   color: white;
+}
+
+.landing-header .branding {
+  margin-bottom: 20px;
+}
+
+.landing-header .school-name {
+  margin: 0;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  opacity: 0.9;
+}
+
+.landing-header .powered-by {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 1px;
+  opacity: 0.8;
+  margin-top: 4px;
+}
+
+.landing-header .tagline {
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin: 8px 0 0 0;
+  opacity: 0.9;
 }
 
 .deck-badge {
@@ -149,6 +198,21 @@
   padding: 20px;
   color: rgba(255, 255, 255, 0.7);
   font-size: 0.85rem;
+}
+
+.landing-footer .copyright {
+  margin-top: 8px;
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.landing-footer .copyright a {
+  color: rgba(255, 255, 255, 0.9);
+  text-decoration: none;
+}
+
+.landing-footer .copyright a:hover {
+  text-decoration: underline;
 }
 
 @media (max-width: 768px) {

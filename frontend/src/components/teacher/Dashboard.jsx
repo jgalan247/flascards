@@ -88,19 +88,21 @@ function Dashboard({ teacher, onLogout }) {
       </header>
 
       <div className="dashboard-content">
-        <div className="filters">
-          <select
-            value={filterSubject}
-            onChange={(e) => setFilterSubject(e.target.value)}
-          >
-            <option value="">All Subjects</option>
-            {subjects.map((subject) => (
-              <option key={subject.id} value={subject.id}>
-                {subject.name} ({subject.deck_count})
-              </option>
-            ))}
-          </select>
-        </div>
+        {decks.length > 0 && (
+          <div className="filters">
+            <select
+              value={filterSubject}
+              onChange={(e) => setFilterSubject(e.target.value)}
+            >
+              <option value="">All Subjects</option>
+              {subjects.map((subject) => (
+                <option key={subject.id} value={subject.id}>
+                  {subject.name} ({subject.deck_count})
+                </option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {filteredDecks.length === 0 ? (
           <div className="empty-state">

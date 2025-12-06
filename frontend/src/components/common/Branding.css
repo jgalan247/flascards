@@ -1,0 +1,43 @@
+.branding {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.branding .school-name {
+  margin: 0;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #333;
+}
+
+.branding .powered-by {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  opacity: 0.7;
+  margin-top: 3px;
+}
+
+.branding .tagline {
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  margin: 6px 0 0 0;
+  color: #667eea;
+}
+
+/* Light version for dark backgrounds */
+.branding-light .school-name {
+  color: white;
+  opacity: 0.95;
+}
+
+.branding-light .powered-by {
+  opacity: 0.8;
+}
+
+.branding-light .tagline {
+  color: white;
+  opacity: 0.9;
+}

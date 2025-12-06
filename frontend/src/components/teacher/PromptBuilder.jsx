@@ -102,7 +102,8 @@ function PromptBuilder({ teacher, onLogout }) {
       navigate(`/study/${response.data.slug}`)
     } catch (error) {
       console.error('Error saving deck:', error)
-      alert('Error saving deck. Please try again.')
+      const errorMessage = error.response?.data?.error || error.response?.data?.detail || JSON.stringify(error.response?.data) || 'Unknown error'
+      alert(`Error saving deck: ${errorMessage}`)
     } finally {
       setSaving(false)
     }

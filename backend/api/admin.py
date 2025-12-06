@@ -1,26 +1,48 @@
+from django import forms
 from django.contrib import admin
 from .models import Teacher, Subject, Deck, Card
 
 
+class TeacherAdminForm(forms.ModelForm):
+    new_password = forms.CharField(
+        required=False,
+        widget=forms.PasswordInput,
+        help_text='Enter a new password to change it. Leave blank to keep current password.'
+    )
+
+    class Meta:
+        model = Teacher
+        fields = ['name', 'email']
+
+    def save(self, commit=True):
+        teacher = super().save(commit=False)
+        new_password = self.cleaned_data.get('new_password')
+        if new_password:
+            teacher.set_password(new_password)
+        if commit:
+            teacher.save()
+        return teacher
+
+
 @admin.register(Teacher)
 class TeacherAdmin(admin.ModelAdmin):
+    form = TeacherAdminForm
     list_display = ('name', 'email', 'created_at')
     search_fields = ('name', 'email')
     readonly_fields = ('created_at',)
 
     fieldsets = (
         (None, {
-            'fields': ('name', 'email', 'password')
+            'fields': ('name', 'email')
+        }),
+        ('Change Password', {
+            'fields': ('new_password',),
+            'description': 'Enter a new password to reset it. Leave blank to keep the current password.'
         }),
         ('Info', {
             'fields': ('created_at',)
         }),
     )
-
-    def save_model(self, request, obj, form, change):
-        if 'password' in form.changed_data:
-            obj.set_password(form.cleaned_data['password'])
-        super().save_model(request, obj, form, change)
 
 
 @admin.register(Subject)

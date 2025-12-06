@@ -38,6 +38,7 @@ class Deck(models.Model):
     exam_board = models.CharField(max_length=50, blank=True)
     year_group = models.CharField(max_length=20, blank=True)
     target_grade = models.CharField(max_length=20, blank=True)
+    created_by = models.CharField(max_length=100, blank=True)  # Custom author name
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     is_public = models.BooleanField(default=True)

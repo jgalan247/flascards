@@ -360,6 +360,13 @@
   display: flex;
   gap: 15px;
   justify-content: flex-end;
+  position: sticky;
+  bottom: 0;
+  background: white;
+  padding: 20px;
+  margin: 20px -30px -30px -30px;
+  border-top: 1px solid #e5e7eb;
+  border-radius: 0 0 16px 16px;
 }
 
 /* Prompt Type Selector */

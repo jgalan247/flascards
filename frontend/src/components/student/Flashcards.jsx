@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../../utils/api'
 import LoadingSpinner from '../common/LoadingSpinner'
+import Branding from '../common/Branding'
 import './Flashcards.css'
 
 function Flashcards() {
@@ -107,6 +108,7 @@ function Flashcards() {
 
   return (
     <div className="flashcards-container">
+      <Branding />
       <header className="flashcards-header">
         <button className="btn-back" onClick={() => navigate(`/study/${slug}`)}>
           ← Back
