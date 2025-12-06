@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../../utils/api'
 import LoadingSpinner from '../common/LoadingSpinner'
+import AppFlowGuide from './AppFlowGuide'
 import './Dashboard.css'
 
 function Dashboard({ teacher, onLogout }) {
@@ -88,6 +89,7 @@ function Dashboard({ teacher, onLogout }) {
       </header>
 
       <div className="dashboard-content">
+        <AppFlowGuide />
         {decks.length > 0 && (
           <div className="filters">
             <select
