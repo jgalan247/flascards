@@ -202,3 +202,153 @@ Important:
 
   return prompt
 }
+
+// Accessibility needs mapped to specific requirements
+const accessibilityRequirements = {
+  autism: `AUTISM-FRIENDLY REQUIREMENTS:
+1. Use literal language only (no idioms or metaphors)
+2. Give explicit, numbered step-by-step instructions
+3. Replace pronouns with specific nouns when unclear
+4. Use concrete quantities (e.g., "Solve 4 equations" not "Solve a few")
+5. Consistent numbered structure throughout
+6. Clear transitions between sections (e.g., "You have finished Section 1. Now move to Section 2.")`,
+
+  dyslexia: `DYSLEXIA-FRIENDLY REQUIREMENTS:
+1. Use short sentences (max 15-20 words)
+2. Use simple, common vocabulary
+3. Avoid walls of text - use bullet points and spacing
+4. Use sans-serif font friendly formatting
+5. Bold key terms and instructions
+6. Provide word banks where appropriate`,
+
+  adhd: `ADHD-FRIENDLY REQUIREMENTS:
+1. Break tasks into small, timed chunks (5-10 min max)
+2. Use engaging, varied activities
+3. Include movement or interactive elements where possible
+4. Clear visual structure with boxes and borders
+5. Frequent checkpoints and mini-goals
+6. Reduce visual clutter`,
+
+  eal: `EAL (English as Additional Language) REQUIREMENTS:
+1. Use simple, clear English
+2. Avoid idioms and cultural references
+3. Provide vocabulary definitions
+4. Use visuals to support understanding
+5. Include sentence starters and frames
+6. Allow bilingual glossary space`,
+
+  visual: `VISUAL IMPAIRMENT REQUIREMENTS:
+1. Use high contrast text
+2. Large, clear fonts
+3. Describe all images in text
+4. Avoid colour-only information
+5. Simple, uncluttered layouts
+6. Screen reader compatible structure`,
+
+  default: `ACCESSIBILITY REQUIREMENTS:
+1. Clear, simple language
+2. Structured layout with numbered sections
+3. Visual supports where helpful
+4. Explicit instructions`
+}
+
+function getAccessibilityRequirements(accessibility) {
+  if (!accessibility) return accessibilityRequirements.default
+
+  const lower = accessibility.toLowerCase()
+  if (lower.includes('autism') || lower.includes('asc') || lower.includes('asd')) {
+    return accessibilityRequirements.autism
+  }
+  if (lower.includes('dyslexia')) {
+    return accessibilityRequirements.dyslexia
+  }
+  if (lower.includes('adhd') || lower.includes('attention')) {
+    return accessibilityRequirements.adhd
+  }
+  if (lower.includes('eal') || lower.includes('english as additional')) {
+    return accessibilityRequirements.eal
+  }
+  if (lower.includes('visual') || lower.includes('blind') || lower.includes('sight')) {
+    return accessibilityRequirements.visual
+  }
+
+  return `ACCESSIBILITY REQUIREMENTS:\n${accessibility}`
+}
+
+export function generateWorksheetPrompt(formData, duration = 40) {
+  const accessibilityReqs = getAccessibilityRequirements(formData.accessibility)
+
+  const prompt = `Create a ${duration}-minute ${formData.yearGroup || 'KS3'} ${formData.subject} worksheet on ${formData.topic}${formData.accessibility ? ` for a student with ${formData.accessibility}` : ''}.
+
+LEARNING OBJECTIVES:
+${formData.learningObjectives || '- Cover key concepts for this topic'}
+
+${accessibilityReqs}
+
+STRUCTURE:
+- Key vocabulary box with definitions
+- Starter activity (5-10 min)
+- Worked example with numbered steps
+- Main practice (20-30 min) - easy to hard progression
+- Extension for early finishers
+
+FORMAT:
+- Success criteria for each task
+- Hint boxes for challenging questions
+- Time estimates per section
+${formData.subject?.toLowerCase().includes('math') ? '- Use LaTeX for maths notation' : ''}`
+
+  return prompt
+}
+
+export function generateAdaptPrompt(formData, originalMaterial = '') {
+  const accessibilityReqs = getAccessibilityRequirements(formData.accessibility)
+
+  const prompt = `Adapt this ${formData.subject} resource on "${formData.topic}" for a student with ${formData.accessibility || 'additional learning needs'}.
+
+KEEP: Learning objectives, core content, key concepts
+
+ADAPT WITH THESE REQUIREMENTS:
+${accessibilityReqs}
+
+ALSO ADD:
+- Vocabulary box with key terms defined
+- Success criteria for tasks
+- Hint boxes where needed
+- Clear section transitions
+
+ORIGINAL MATERIAL TO ADAPT:
+${originalMaterial || '[Paste your original material here]'}`
+
+  return prompt
+}
+
+export function generateQuizPrompt(formData) {
+  const accessibilityReqs = getAccessibilityRequirements(formData.accessibility)
+
+  const prompt = `Create ${formData.cardCount || 20} quiz questions on ${formData.topic} for ${formData.yearGroup || 'KS3'} ${formData.subject}${formData.accessibility ? ` for a student with ${formData.accessibility}` : ''}.
+
+LEARNING OBJECTIVES:
+${formData.learningObjectives || '- Cover key concepts for this topic'}
+
+${accessibilityReqs}
+
+REQUIREMENTS:
+1. One concept per question
+2. Clear, unambiguous wording
+3. Progress from recall → understanding → application
+4. Include answer key
+
+FORMAT:
+\`\`\`json
+[
+  {
+    "question": "Clear question text",
+    "answer": "Correct answer",
+    "hint": "Optional hint for support"
+  }
+]
+\`\`\``
+
+  return prompt
+}
