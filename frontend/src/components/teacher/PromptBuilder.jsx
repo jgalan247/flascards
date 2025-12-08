@@ -24,6 +24,7 @@ function PromptBuilder({ teacher, onLogout }) {
   const [aiResponse, setAiResponse] = useState('')
   const [parsedCards, setParsedCards] = useState(null)
   const [parseError, setParseError] = useState('')
+  const [parseWarning, setParseWarning] = useState('')
   const [deckTitle, setDeckTitle] = useState('')
   const [saving, setSaving] = useState(false)
   const [phase, setPhase] = useState('wizard') // wizard, prompt, paste, review, save
@@ -70,13 +71,25 @@ function PromptBuilder({ teacher, onLogout }) {
 
   const handleParseResponse = () => {
     setParseError('')
-    const cards = parseCards(aiResponse)
-    const validation = validateCards(cards)
+    setParseWarning('')
+    const result = parseCards(aiResponse)
+
+    if (!result) {
+      setParseError('Could not parse cards. Please check the format is valid JSON, markdown table, or Q:/A: pairs.')
+      return
+    }
+
+    const validation = validateCards(result.cards)
 
     if (validation.valid) {
       setParsedCards(validation.cards)
       setDeckTitle(`${formData.topic} - ${formData.yearGroup}`)
       setPhase('review')
+
+      // Show warning if JSON was repaired
+      if (result.repaired && result.warning) {
+        setParseWarning(result.warning)
+      }
     } else {
       setParseError(validation.error || 'Could not parse cards. Please check the format.')
     }
@@ -279,6 +292,12 @@ function PromptBuilder({ teacher, onLogout }) {
     <div className="review-phase">
       <h2>Review Your Flashcards</h2>
       <p>{parsedCards?.length} cards parsed successfully!</p>
+
+      {parseWarning && (
+        <div className="warning-message">
+          <strong>Note:</strong> {parseWarning}
+        </div>
+      )}
 
       <div className="deck-title-input">
         <label>Deck Title:</label>
