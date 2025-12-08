@@ -74,6 +74,28 @@ Base: `/api/`
 - **Deck actions**: `decks/:slug/update_cards/` (PUT) - replaces all cards
 - **Public**: `study/<slug>/` - no auth, returns deck with cards
 
+## Database Backup
+
+### Manual Backup Commands
+```bash
+cd backend
+source venv/bin/activate
+python manage.py backup_db              # Create SQLite backup
+python manage.py backup_db --json       # Also export to JSON (portable)
+python manage.py backup_db --list       # List existing backups
+python manage.py backup_db --restore db_20241208_120000.sqlite3  # Restore
+```
+
+### Automated Backups (Production)
+The `backup_cron.sh` script runs daily via cron. Setup on server:
+```bash
+chmod +x /var/www/flashcards/backend/backup_cron.sh
+crontab -e
+# Add: 0 2 * * * /var/www/flashcards/backend/backup_cron.sh >> /var/log/flashcards_backup.log 2>&1
+```
+
+Backups are stored in `backend/backups/` with automatic cleanup (keeps last 14 days).
+
 ## Environment Variables
 
 - `VITE_API_URL`: Frontend API base (default: `http://localhost:8000/api`)
