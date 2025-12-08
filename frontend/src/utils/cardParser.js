@@ -4,23 +4,62 @@
  */
 
 export function parseCards(text) {
+  // Clean the input first
+  const cleanedText = cleanPastedText(text)
+
   // Try JSON parsing first
-  const jsonResult = tryParseJSON(text)
+  const jsonResult = tryParseJSON(cleanedText)
   if (jsonResult) return jsonResult
 
   // Try markdown table format
-  const tableCards = tryParseTable(text)
+  const tableCards = tryParseTable(cleanedText)
   if (tableCards) return { cards: tableCards, format: 'table' }
 
   // Try numbered list format
-  const listCards = tryParseList(text)
+  const listCards = tryParseList(cleanedText)
   if (listCards) return { cards: listCards, format: 'list' }
 
   // Try Q:/A: format
-  const qaCards = tryParseQA(text)
+  const qaCards = tryParseQA(cleanedText)
   if (qaCards) return { cards: qaCards, format: 'qa' }
 
   return null
+}
+
+/**
+ * Clean pasted text to handle common copy/paste issues
+ */
+function cleanPastedText(text) {
+  if (!text) return ''
+
+  let cleaned = text
+
+  // Remove common leading garbage (text before the JSON array)
+  // Look for the start of JSON array
+  const jsonStartIndex = cleaned.indexOf('[')
+  if (jsonStartIndex > 0) {
+    // Check if there's meaningful text before [ or just garbage
+    const beforeJson = cleaned.substring(0, jsonStartIndex).trim()
+    // If it's just whitespace or common prefixes, remove it
+    if (!beforeJson || /^(here|json|output|response|flashcards|cards)?:?\s*$/i.test(beforeJson)) {
+      cleaned = cleaned.substring(jsonStartIndex)
+    }
+  }
+
+  // Remove markdown code block markers
+  cleaned = cleaned.replace(/^```(?:json)?\s*/gm, '')
+  cleaned = cleaned.replace(/```\s*$/gm, '')
+
+  // Remove BOM and zero-width characters
+  cleaned = cleaned.replace(/[\uFEFF\u200B\u200C\u200D\u2060]/g, '')
+
+  // Normalize line endings
+  cleaned = cleaned.replace(/\r\n/g, '\n').replace(/\r/g, '\n')
+
+  // Remove leading/trailing whitespace
+  cleaned = cleaned.trim()
+
+  return cleaned
 }
 
 /**
@@ -105,35 +144,51 @@ function repairJSON(jsonStr) {
 }
 
 /**
+ * Build repaired JSON result from matched objects
+ */
+function buildRepairedResult(matches, originalStr) {
+  const expectedCount = (originalStr.match(/\{\s*"/g) || []).length
+  const foundCount = matches.length
+
+  // Rebuild the JSON array with only complete objects
+  const repairedJson = '[\n  ' + matches.join(',\n  ') + '\n]'
+
+  let warning = null
+  if (foundCount < expectedCount) {
+    const lostCount = expectedCount - foundCount
+    warning = `JSON was truncated. Recovered ${foundCount} complete cards (${lostCount} incomplete card${lostCount > 1 ? 's' : ''} removed). Please check if any cards are missing.`
+  } else {
+    warning = `JSON was repaired automatically. Please verify all cards are correct.`
+  }
+
+  return {
+    json: repairedJson,
+    repaired: true,
+    warning
+  }
+}
+
+/**
  * Repair truncated JSON by finding the last complete object
  * Returns { json, repaired, warning }
  */
 function repairTruncatedJSON(str) {
   // Find all complete objects in the array
-  const objectRegex = /\{[^{}]*"question"\s*:\s*"[^"]*"[^{}]*"answer"\s*:\s*"[^"]*"[^{}]*\}/g
+  // This regex handles escaped quotes within strings
+  const objectRegex = /\{\s*"question"\s*:\s*"(?:[^"\\]|\\.)*"\s*,\s*"answer"\s*:\s*"(?:[^"\\]|\\.)*"\s*\}/g
   const matches = str.match(objectRegex)
 
+  // Also try alternative key order (answer before question)
+  if (!matches || matches.length === 0) {
+    const altRegex = /\{\s*"answer"\s*:\s*"(?:[^"\\]|\\.)*"\s*,\s*"question"\s*:\s*"(?:[^"\\]|\\.)*"\s*\}/g
+    const altMatches = str.match(altRegex)
+    if (altMatches && altMatches.length > 0) {
+      return buildRepairedResult(altMatches, str)
+    }
+  }
+
   if (matches && matches.length > 0) {
-    // Count how many objects we expected vs found
-    const expectedCount = (str.match(/\{\s*"/g) || []).length
-    const foundCount = matches.length
-
-    // Rebuild the JSON array with only complete objects
-    const repairedJson = '[\n  ' + matches.join(',\n  ') + '\n]'
-
-    let warning = null
-    if (foundCount < expectedCount) {
-      const lostCount = expectedCount - foundCount
-      warning = `JSON was truncated. Recovered ${foundCount} complete cards (${lostCount} incomplete card${lostCount > 1 ? 's' : ''} removed). Please check if any cards are missing.`
-    } else {
-      warning = `JSON was repaired automatically. Please verify all cards are correct.`
-    }
-
-    return {
-      json: repairedJson,
-      repaired: true,
-      warning
-    }
+    return buildRepairedResult(matches, str)
   }
 
   // Alternative: Try to close the JSON properly
