@@ -17,6 +17,9 @@ import LearnMode from './components/student/LearnMode'
 import TestMode from './components/student/TestMode'
 import GravityGame from './components/student/GravityGame'
 
+// Public components
+import CPDPresentation from './components/CPDPresentation'
+
 function App() {
   const [teacher, setTeacher] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -96,6 +99,9 @@ function App() {
           <Route path="/study/:slug/learn" element={<LearnMode />} />
           <Route path="/study/:slug/test" element={<TestMode />} />
           <Route path="/study/:slug/gravity" element={<GravityGame />} />
+
+          {/* Public pages */}
+          <Route path="/cpd" element={<CPDPresentation />} />
         </Routes>
       </div>
     </Router>

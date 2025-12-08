@@ -26,6 +26,12 @@ npm run build    # Production build
 npm run lint     # ESLint
 ```
 
+### Testing
+```bash
+cd backend
+python manage.py test api  # Run Django tests
+```
+
 ### Production
 ```bash
 python manage.py migrate --settings=flashcards.settings_prod
@@ -36,6 +42,7 @@ python manage.py collectstatic --noinput --settings=flashcards.settings_prod
 
 ### Backend (`backend/api/`)
 - **Django REST Framework** with session-based auth (not JWT)
+- **SQLite** database (default Django db.sqlite3)
 - Custom `Teacher` model (not Django's User) with `is_verified`, `verification_token`, `reset_token` fields
 - Model hierarchy: `Teacher` → `Subject` → `Deck` → `Card`
 - Decks use auto-generated unique slugs for shareable URLs (`/study/:slug`)
@@ -46,6 +53,7 @@ python manage.py collectstatic --noinput --settings=flashcards.settings_prod
 - **React 19** + Vite + React Router v7
 - Auth state managed in `App.jsx` via `teacher` state and `checkAuth()` on mount
 - API client (`utils/api.js`) handles CSRF tokens automatically via axios interceptor
+- Components organized by user type: `components/teacher/` and `components/student/`
 
 ### Key Utilities
 - `cardParser.js`: Parses AI output in multiple formats (JSON, markdown tables, numbered lists, Q:/A: pairs) + fuzzy matching via Levenshtein distance for Learn mode

@@ -1,0 +1,838 @@
+.cpd-presentation {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0D9488 0%, #065F46 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  outline: none;
+}
+
+.slide-container {
+  width: 100%;
+  max-width: 960px;
+  min-height: 540px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Base Slide Styles */
+.slide {
+  width: 100%;
+  padding: 2rem;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.slide h1 {
+  font-family: Georgia, serif;
+  font-size: 3rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.slide h2 {
+  font-family: Georgia, serif;
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #0D9488;
+  margin-bottom: 0.5rem;
+}
+
+.slide h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #1E293B;
+  margin-bottom: 0.25rem;
+}
+
+.slide .subtitle {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.85);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.slide .slide-subtitle {
+  font-size: 1rem;
+  color: #64748B;
+  margin-bottom: 2rem;
+}
+
+.badge {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.badge-orange {
+  background: #F97316;
+}
+
+/* Title Slide */
+.slide-title {
+  text-align: center;
+}
+
+.slide-title .title-footer {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 3rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.slide-title .url {
+  font-weight: 600;
+  color: white;
+}
+
+/* Overview Slide */
+.slide-overview {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.slide-overview .duration-badge {
+  display: inline-block;
+  background: #F0FDF4;
+  color: #166534;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.overview-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.overview-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: #F8FAFC;
+  border-radius: 0.5rem;
+}
+
+.overview-item .item-number {
+  width: 2.5rem;
+  height: 2.5rem;
+  background: #0D9488;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.overview-item .item-content {
+  flex: 1;
+}
+
+.overview-item .item-content h3 {
+  margin: 0;
+}
+
+.overview-item .item-content p {
+  margin: 0;
+  color: #64748B;
+  font-size: 0.875rem;
+}
+
+.overview-item .item-time {
+  color: #64748B;
+  font-size: 0.875rem;
+}
+
+/* Problem Slide */
+.slide-problem {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.problem-card {
+  background: #FEF2F2;
+  border-left: 4px solid #EF4444;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.problem-card .problem-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.problem-card h3 {
+  color: #991B1B;
+  margin-bottom: 0.25rem;
+}
+
+.problem-card p {
+  color: #64748B;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Solution Slide */
+.slide-solution {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.solution-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.solution-card {
+  background: #F0FDF4;
+  border-left: 4px solid #22C55E;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.solution-card .solution-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.solution-card h3 {
+  color: #166534;
+  margin-bottom: 0.25rem;
+}
+
+.solution-card p {
+  color: #64748B;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Demo Slide */
+.slide-demo {
+  text-align: center;
+}
+
+.demo-steps {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 3rem;
+}
+
+.demo-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.demo-step .step-circle {
+  width: 3rem;
+  height: 3rem;
+  border: 2px solid #0D9488;
+  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.demo-step.active .step-circle {
+  background: #F97316;
+  border-color: #F97316;
+}
+
+.demo-step span {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+}
+
+.demo-step .step-connector {
+  width: 2rem;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 0 0.5rem;
+}
+
+/* Modes Slide */
+.slide-modes {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.modes-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.mode-card {
+  background: #F8FAFC;
+  border: 2px solid #E2E8F0;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  text-align: left;
+}
+
+.mode-card .mode-icon {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.mode-card h3 {
+  margin-bottom: 0.5rem;
+}
+
+.mode-card p {
+  color: #64748B;
+  font-size: 0.875rem;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Principles Slide */
+.slide-principles {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.principles-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.principle-card {
+  background: linear-gradient(135deg, var(--accent-color) 0%, color-mix(in srgb, var(--accent-color) 70%, #000) 100%);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  color: white;
+}
+
+.principle-card .principle-label {
+  font-size: 0.75rem;
+  opacity: 0.8;
+}
+
+.principle-card h3 {
+  color: white;
+  font-family: Georgia, serif;
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.principle-card p {
+  font-size: 0.875rem;
+  opacity: 0.9;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.principle-card .principle-tip {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  font-size: 0.875rem;
+}
+
+/* Workflow Slide */
+.slide-workflow {
+  background: #F8FAFC;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.workflow-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.workflow-label {
+  background: #0D9488;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  min-width: 5rem;
+  text-align: center;
+}
+
+.workflow-label.student {
+  background: #F97316;
+}
+
+.workflow-steps {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+}
+
+.workflow-step {
+  display: flex;
+  align-items: center;
+}
+
+.workflow-step .step-box {
+  background: white;
+  border: 2px solid #0D9488;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  text-align: center;
+  min-width: 8rem;
+}
+
+.workflow-step .step-box.student-step {
+  border-color: #F97316;
+}
+
+.workflow-step .step-box strong {
+  display: block;
+  font-size: 0.75rem;
+  color: #0D9488;
+}
+
+.workflow-step .step-box.student-step strong {
+  color: #F97316;
+}
+
+.workflow-step .step-box span {
+  font-size: 0.75rem;
+  color: #64748B;
+}
+
+.workflow-step.highlight .step-box {
+  background: #F97316;
+  border-color: #F97316;
+}
+
+.workflow-step.highlight .step-box strong,
+.workflow-step.highlight .step-box span {
+  color: white;
+}
+
+.workflow-step.highlight-green .step-box {
+  background: #22C55E;
+  border-color: #22C55E;
+}
+
+.workflow-step.highlight-green .step-box strong,
+.workflow-step.highlight-green .step-box span {
+  color: white;
+}
+
+.workflow-step .arrow {
+  color: #0D9488;
+  font-size: 1.25rem;
+  margin: 0 0.25rem;
+}
+
+.workflow-step .arrow.orange {
+  color: #F97316;
+}
+
+.workflow-arrow-down {
+  text-align: center;
+  color: #64748B;
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.workflow-benefits {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin-top: 1.5rem;
+}
+
+.workflow-benefits .benefit {
+  color: #22C55E;
+  font-size: 0.875rem;
+}
+
+/* Getting Started Slide */
+.slide-getting-started {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.getting-started-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.docs-section {
+  background: #F1F5F9;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+}
+
+.docs-section .section-label {
+  color: #64748B;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.docs-section h3 {
+  color: #0D9488;
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
+}
+
+.docs-section p {
+  color: #1E293B;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+}
+
+.docs-section .divider {
+  border-top: 1px solid #E2E8F0;
+  margin: 1rem 0;
+}
+
+.docs-section .guides-label {
+  color: #64748B;
+  font-size: 0.875rem;
+}
+
+.docs-section ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin-top: 0.5rem;
+}
+
+.docs-section li {
+  color: #1E293B;
+  font-size: 1rem;
+  line-height: 2;
+}
+
+.quickstart-section h3 {
+  color: #1E293B;
+  margin-bottom: 1rem;
+}
+
+.quickstart-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.quickstart-step {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.quickstart-step .step-indicator {
+  width: 1.5rem;
+  height: 1.5rem;
+  background: #0D9488;
+  border-radius: 0.25rem;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.quickstart-step.highlight .step-indicator {
+  background: #F97316;
+}
+
+.quickstart-step .step-content strong {
+  display: block;
+  color: #1E293B;
+  font-size: 0.875rem;
+}
+
+.quickstart-step .step-content span {
+  color: #64748B;
+  font-size: 0.875rem;
+}
+
+/* Activity Slide */
+.slide-activity {
+  text-align: center;
+}
+
+.activity-box {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+}
+
+.activity-box p {
+  color: #1E293B;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.activity-box .time-badge {
+  display: inline-block;
+  background: #ECFDF5;
+  color: #0D9488;
+  padding: 0.5rem 1rem;
+  border-radius: 2rem;
+  font-weight: 600;
+}
+
+.activity-url {
+  color: white;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+/* Tips Slide */
+.slide-tips {
+  background: white;
+  border-radius: 1rem;
+  padding: 2rem;
+}
+
+.tips-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.tips-column {
+  padding-top: 1rem;
+}
+
+.tips-column .tips-header {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 0.25rem;
+}
+
+.tips-column.do .tips-header {
+  background: #F0FDF4;
+  color: #166534;
+  border-left: 4px solid #22C55E;
+}
+
+.tips-column.dont .tips-header {
+  background: #FEF2F2;
+  color: #991B1B;
+  border-left: 4px solid #EF4444;
+}
+
+.tip-item {
+  color: #1E293B;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.tip-item strong {
+  color: #1E293B;
+}
+
+/* Thank You Slide */
+.slide-thankyou {
+  text-align: center;
+}
+
+.links-box {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid white;
+  border-radius: 1rem;
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 3rem;
+  margin: 2rem auto;
+  max-width: 500px;
+}
+
+.link-item {
+  text-align: center;
+}
+
+.link-item .link-label {
+  display: block;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.link-item strong {
+  color: white;
+  font-size: 1rem;
+}
+
+.slide-thankyou .author {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 1rem;
+}
+
+/* Navigation Controls */
+.presentation-controls {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.nav-button {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.nav-button:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.slide-indicators {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.indicator {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.indicator.active {
+  background: white;
+}
+
+.indicator:hover {
+  background: rgba(255, 255, 255, 0.6);
+}
+
+.slide-counter {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.875rem;
+}
+
+.exit-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.exit-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+  .problem-grid,
+  .solution-grid,
+  .tips-grid,
+  .getting-started-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .modes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .principles-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .workflow-steps {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .slide h1 {
+    font-size: 2rem;
+  }
+
+  .slide h2 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .modes-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .links-box {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .workflow-section {
+    flex-direction: column;
+  }
+
+  .workflow-benefits {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
